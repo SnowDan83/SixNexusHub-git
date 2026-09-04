@@ -1,0 +1,9 @@
+# Vers. 3.0.1
+
+# Storage secondario e filesystem di ripristino
+$RECYCLE.BIN/
+System Volume Information/
+lost+found/
+*.tmp
+*.crdownload
+.Trash-*/
