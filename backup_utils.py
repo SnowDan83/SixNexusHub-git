@@ -1,8 +1,7 @@
-# Vers. 3.0.1
 #!/usr/bin/env python3
+# Vers. 3.1.0
 # ==============================================================================
-# SixNexus Hub - Backup Engine
-# Multi-Thread Rsync Engine with Real-Time Log Streaming & Clean Abort
+# SixNexus Hub - Backup Engine (Rsync Multi-Thread via SSH/NFS)
 # ==============================================================================
 
 import os
@@ -17,10 +16,6 @@ class BackupManager:
         self._stop_requested = False
 
     def start_sync(self, mode, job, log_callback, on_complete):
-        """
-        Inizializza ed esegue il job di sincronizzazione rsync in background.
-        mode: 'backup' oppure 'restore'
-        """
         self._stop_requested = False
         thread = threading.Thread(
             target=self._run_sync_thread,
@@ -33,13 +28,11 @@ class BackupManager:
         src = job.get("source", "")
         dst = job.get("dest", "")
 
-        # In modalità restore invertiamo sorgente e destinazione
         if mode == "restore":
             src, dst = dst, src
 
         src_cmd = src if src.endswith("/") else src + "/"
 
-        # Se la destinazione è locale, verifica e crea l'albero di directory
         if ":" not in dst:
             os.makedirs(dst, exist_ok=True)
 
@@ -100,26 +93,26 @@ class BackupManager:
             return_code = self.process.wait()
 
             if self._stop_requested:
-                log_callback("\n[ANNULLATO] Processo interrotto manualmente dall'utente.\n")
+                log_callback("\n[ANNULLATO] Processo interrotto dall'utente.\n")
                 on_complete(False, "Annullato")
             elif return_code == 0:
                 log_callback("\n[SUCCESS] Operazione rsync completata con successo.\n")
                 on_complete(True, "Completato")
             elif return_code == 255:
-                log_callback("\n[ERRORE SSH] Autenticazione non riuscita o host non raggiungibile.\n")
+                log_callback("\n[ERRORE SSH] Impossibile autenticarsi. Verifica le chiavi SSH sul NAS.\n")
                 on_complete(False, "Errore SSH")
             else:
-                log_callback(f"\n[ERRORE] Rsync terminato con codice di errore {return_code}.\n")
+                log_callback(f"\n[ERRORE] Rsync terminato con codice {return_code}.\n")
                 on_complete(False, f"Errore Rsync ({return_code})")
 
         except Exception as e:
-            log_callback(f"\n[ECCEZIONE] Errore imprevisto durante l'esecuzione: {e}\n")
+            log_callback(f"\n[ECCEZIONE] Errore esecuzione: {e}\n")
             on_complete(False, str(e))
         finally:
             self.process = None
 
     def stop(self):
-        """Richiede l'arresto immediato e pulito del processo rsync."""
+        """Interrompe il processo rsync."""
         self._stop_requested = True
         if self.process and self.process.poll() is None:
             try:

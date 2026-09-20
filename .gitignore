@@ -1,0 +1,41 @@
+# Vers. 3.1.0
+# ==============================================================================
+# SixNexus Hub - .gitignore
+# ==============================================================================
+
+# 1. Credenziali e Sicurezza (Blocca qualsiasi file .env e credentials)
+*.env
+*.env.*
+credentials.env
+!*.env.example
+
+# 2. Log e runtime dei backup
+log_rsync/*
+!log_rsync/.gitkeep
+*.log
+
+# 3. Python (Cache e Bytecode)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 4. Ambienti virtuali
+.venv/
+venv/
+ENV/
+env/
+
+# 5. Note personali, appunti temporanei e artefatti di sistema / IDE
+camando_installazione_icona.txt
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# 6. SixNexus Runtime & Mount directories
+NAS_Home/
+NFS_Backup/
+NFS_Data_*/
+NFS_DLNA_POOL/

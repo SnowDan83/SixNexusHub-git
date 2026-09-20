@@ -1,17 +1,16 @@
-Markdown
-# SixNexus Hub 🚀 3.0.1
+<!-- # Vers. 3.1.0 -->
+# SixNexus Hub
 
-**SixNexus Hub** è un centro di controllo grafico avanzato, reattivo e modulare scritto in **Python** e basato su **PySide6 (Qt6)** con design **Adwaita Dark**. Progettato specificamente per workstation Linux (CachyOS, Arch, Ubuntu, Fedora), centralizza la gestione della rete VPN, il montaggio di share NFS, la sincronizzazione asincrona dei backup (rsync) e le operazioni Git multi-repository.
+Control Center cross-host sviluppato in **PySide6 (Qt6)** con design **Material Dark Pro** per la gestione centralizzata di backup Rsync atomici, repository Git, mount di rete (NFS e SFTP/SSHFS) e tunnel VPN Tailscale tra workstation Desktop e Notebook Ubuntu.
 
----
+## Requisiti di Sistema
 
-## 🛠️ Caratteristiche Principali
-
-* **📁 Gestione Rete & Storage:** Controllo rapido della VPN mesh **Tailscale** e montaggio/smontaggio non bloccante di volumi **NFS** su script asincroni dedicati.
-* **🚀 Controller Git Integrato:** Selezione rapida tra molteplici repository locali, lettura immediata del branch attivo, esecuzione di `git status`, `git pull` e workflow automatizzato di commit e push con output in tempo reale.
-* **💾 Motore Backup Rsync:** Esecuzione multi-thread di backup incrementali e ripristini con parsing continuo dei log e pulsante di interruzione immediata senza blocco dell'interfaccia.
-* **🦥 Integrazione AI (Desktop):** Scheda dedicata per l'avvio, l'arresto e l'apertura rapida dell'interfaccia Web per modelli locali (es. Unsloth AI Studio).
-
+* **OS:** Ubuntu Linux 22.04 LTS o superiore
+* **Python:** 3.10 o successivo
+* **Pacchetti di sistema:**
+  ```bash
+  sudo apt update
+  sudo apt install -y python3-pip rsync sshfs nfs-common tailscale git fuse3
 ---
 
 ## 📦 Requisiti di Sistema
@@ -21,49 +20,37 @@ Markdown
 * **tailscale** (per la gestione VPN)
 * **git**
 
-### Installazione Dipendenze
+##Installazione Rapida
+Clona il repository:
 
-#### Tramite ambiente virtuale (consigliato):
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-Tramite gestori pacchetti di sistema:
-Arch / CachyOS: sudo pacman -S python-pyside6 rsync
-
-Fedora: sudo dnf install -y python3-pyside6 rsync
-
-Ubuntu / Debian: sudo apt install -y python3-pyside6 rsync
-
-⚙️ Configurazione e Avvio
-Clonare il repository:
-
-Bash
-git clone [https://github.com/SnowDan83/SixNexusHub-git.git](https://github.com/SnowDan83/SixNexusHub-git.git)
+##Bash
+git clone [https://github.com/tuo-utente/SixNexusHub-git.git](https://github.com/tuo-utente/SixNexusHub-git.git)
 cd SixNexusHub-git
-Rendere eseguibili gli script bash:
+Esegui il provisioning dell'host:
 
-Bash
-chmod +x *.sh
-Personalizzazione parametri (config.py):
+##Bash
+chmod +x Provisioning/setup.sh *.sh main.py
+cd Provisioning && ./setup.sh && cd ..
+(Opzionale) Configura le credenziali di rete:
 
-Configura i percorsi dei tuoi progetti nel dizionario GIT_REPOS.
+##Bash
+cp Provisioning/credentials.env.example Provisioning/credentials.env
 
-Definisci sorgenti, destinazioni ed esclusioni nella lista BACKUP_JOBS.
+##Variabili d'Ambiente Supportate
+È possibile personalizzare l'hub senza modificare il codice sorgente:
 
-Configura gli hostname o gli indirizzi IP nei file mount.sh e config.py.
+* SIXNEXUS_NAS_IP: Indirizzo IP dello storage NAS (Default: 192.168.1.50)
 
-Avvio dell'applicazione:
+* SIXNEXUS_NAS_USER: Utente SSH/SFTP del NAS (Default: $USER locale)
 
-Bash
+* SIXNEXUS_MOUNT_POINT: Percorso locale del mount SFTP (Default: ~/NAS_Home)
+
+* SIXNEXUS_DESK_SRC0: Sorgente Data 0 Desktop (Default: /mnt/Data_00/$USER)
+
+* SIXNEXUS_DESK_SRC1: Sorgente Data 1 Desktop (Default: /mnt/Data_01/Other Backup)
+
+##Esecuzione
+Avvia il control center:
+
+##Bash
 python3 main.py
-🖥️ Integrazione nel Desktop Environment
-Per agganciare l'applicazione alla dock o al menu delle app (GNOME / KDE) senza generare finestre duplicate:
-
-Modifica sixnexus-hub.desktop impostando il percorso assoluto a main.py e icon.png.
-
-Copia il file lanciatore:
-
-Bash
-cp sixnexus-hub.desktop ~/.local/share/applications/
-update-desktop-database ~/.local/share/applications/

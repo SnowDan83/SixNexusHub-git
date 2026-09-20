@@ -1,19 +1,20 @@
-# Vers. 3.0.1
-#!/usr/bin/env bash
+#!/bin/bash
+# Vers. 3.1.0
+# ==============================================================================
+# SixNexus Hub - Mount NFS Shares
+# ==============================================================================
 set -e
 
-# Configurazione endpoint e share NFS (personalizzare con i parametri della propria rete)
-NAS_HOST="${NAS_HOST:-nas.local}" # oppure indirizzo IP, es. 192.168.1.50
-MOUNT_BASE="${HOME}/NFS_Shares"
+NAS_IP="${SIXNEXUS_NAS_IP:-192.168.1.50}"
+TARGET_USER="${USER:-$(whoami)}"
+USER_HOME="${HOME:-/home/$TARGET_USER}"
 
-# Creazione delle directory locali se non presenti
-mkdir -p "${MOUNT_BASE}/Backup"
-mkdir -p "${MOUNT_BASE}/Data"
-mkdir -p "${MOUNT_BASE}/Media"
+DIR_BACKUP="$USER_HOME/NFS_Backup"
+DIR_DLNA="$USER_HOME/NFS_DLNA_POOL"
 
-# Montaggio dei volumi NFS tramite privilegi sudo
-sudo mount -t nfs "${NAS_HOST}:/export/BACKUP" "${MOUNT_BASE}/Backup"
-sudo mount -t nfs "${NAS_HOST}:/export/DATA" "${MOUNT_BASE}/Data"
-sudo mount -t nfs "${NAS_HOST}:/export/MEDIA" "${MOUNT_BASE}/Media"
+mkdir -p "$DIR_BACKUP" "$DIR_DLNA"
 
-echo "[SUCCESS] Tutte le unita NFS sono state montate correttamente in ${MOUNT_BASE}."
+echo "[INFO] Montaggio condivisioni NFS da $NAS_IP..."
+sudo mount -t nfs "$NAS_IP:/BACKUP" "$DIR_BACKUP"
+sudo mount -t nfs "$NAS_IP:/export/DLNA" "$DIR_DLNA"
+echo "[SUCCESS] Volumi NFS montati correttamente."

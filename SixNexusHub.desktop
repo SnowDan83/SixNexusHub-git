@@ -1,0 +1,10 @@
+# Vers. 3.1.0
+[Desktop Entry]
+Type=Application
+Name=SixNexus Hub
+Comment=Control Center & Automazione Cross-Host (NFS, SFTP, Rsync, Git)
+Exec=python3 /opt/sixnexus-hub/main.py
+Icon=/opt/sixnexus-hub/icon.png
+Terminal=false
+Categories=System;Utility;Archiving;
+StartupWMClass=sixnexus-hub

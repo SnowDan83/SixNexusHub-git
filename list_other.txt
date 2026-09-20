@@ -1,9 +1,8 @@
-# Vers. 3.0.1
+# Vers. 3.1.0
+# ==============================================================================
+# SixNexus Hub - Generic Secondary Exclusions (list_other.txt)
+# =============================================================================
 
-# Storage secondario e filesystem di ripristino
-$RECYCLE.BIN/
-System Volume Information/
-lost+found/
-*.tmp
-*.crdownload
-.Trash-*/
+
+
+#Inserire Cartelle file da escludere

@@ -1,11 +1,21 @@
-# Vers. 3.0.1
-#!/usr/bin/env bash
+#!/bin/bash
+# Vers. 3.1.0
+# ==============================================================================
+# SixNexus Hub - Unmount NFS Shares
+# ==============================================================================
+TARGET_USER="${USER:-$(whoami)}"
+USER_HOME="${HOME:-/home/$TARGET_USER}"
 
-MOUNT_BASE="${HOME}/NFS_Shares"
+DIR_BACKUP="$USER_HOME/NFS_Backup"
+DIR_DLNA="$USER_HOME/NFS_DLNA_POOL"
 
-# Smontaggio lazy (-l) per prevenire blocchi di sistema in caso di latenza o disconnessione di rete
-sudo umount -l "${MOUNT_BASE}/Backup" 2>/dev/null || true
-sudo umount -l "${MOUNT_BASE}/Data" 2>/dev/null || true
-sudo umount -l "${MOUNT_BASE}/Media" 2>/dev/null || true
+echo "[INFO] Smontaggio volumi NFS per utente $TARGET_USER..."
+if mountpoint -q "$DIR_BACKUP"; then
+    sudo umount "$DIR_BACKUP"
+fi
 
-echo "[SUCCESS] Tutte le unita NFS sono state smontate correttamente."
+if mountpoint -q "$DIR_DLNA"; then
+    sudo umount "$DIR_DLNA"
+fi
+
+echo "[SUCCESS] Smontaggio volumi completato."

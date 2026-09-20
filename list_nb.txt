@@ -1,25 +1,6 @@
-# Vers. 3.0.1
+# Vers. 3.1.0
+# ==============================================================================
+# SixNexus Hub - Desktop Backup Exclusions (list_desk.txt)
+# ==============================================================================
 
-# Cache browser e di sistema
-.cache/
-.local/share/Trash/
-.var/app/*/cache/
-google-chrome/Default/Cache/
-google-chrome/Default/Code Cache/
-mozilla/firefox/*/cache2/
-
-# Ambienti di sviluppo e dipendenze
-__pycache__/
-*.pyc
-.venv/
-node_modules/
-target/
-build/
-
-# File temporanei e immagini disco pesanti
-*.tmp
-*.log
-*.iso
-*.vmdk
-*.qcow2
-lost+found/
+#Inserire Cartelle file da escludere
